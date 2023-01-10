@@ -26,7 +26,9 @@
         "moment": "^2.29.4",
         "qs": "^6.11.0",
         "react-datepicker": "^4.8.0",
+        "react-to-print": "^2.14.11",
         "react-toastify": "^9.1.1",
-        "react-use": "^17.4.0"
+        "react-use": "^17.4.0",
+        "styled-components": "^5.3.6"
     }
 }

@@ -66,7 +66,7 @@ export default function Dashboard(props) {
         if (booking != null) {
             Inertia.delete(
                 route("monitoring-booking.destroy", booking), {
-                    onSuccess: () => toast.success("item delete"),
+                    onSuccess: () => toast.success("item deleted"),
                 }
             );
         }
@@ -267,23 +267,23 @@ export default function Dashboard(props) {
                         </table>
                     </div>
                     <div className='flex w-full'>
-                    <div className="flex mx-auto items-end mt-4">
-                        <Pagination
-                            links={links}
-                            params={params}
-                        />
-                        <div>
-                            <select
-                                className="select select-bordered w-full max-w-xs"
-                                onChange={(e) => setLimit(e.target.value)}
-                                value={limit}
-                            >
-                                <option value="10">10</option>
-                                <option value="50">50</option>
-                                <option value="100">100</option>
-                            </select>
+                        <div className="flex mx-auto items-end mt-4">
+                            <Pagination
+                                links={links}
+                                params={params}
+                            />
+                            <div>
+                                <select
+                                    className="select select-bordered w-full max-w-xs"
+                                    onChange={(e) => setLimit(e.target.value)}
+                                    value={limit}
+                                >
+                                    <option value="10">10</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                            </div>
                         </div>
-                    </div>
                     </div>
                 </div>
             </div>

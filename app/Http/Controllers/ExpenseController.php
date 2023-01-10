@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 
 class ExpenseController extends Controller
 {
-    public function index(Request $request) 
+    public function index(Request $request)
     {
         $isAdmin = Auth::user()->role === User::ROLE_CASIER;
         $today = Carbon::now();
@@ -24,14 +24,6 @@ class ExpenseController extends Controller
             $query->where('isIncome', 0)->orderBy('created_at', 'DESC');
         }
 
-        if ($request->start_date && $request->end_date) {
-            $startDate = Carbon::parse($request->start_date);
-            $endDate = Carbon::parse($request->end_date);
-
-            $query->whereDate('date_expense', '<=', $endDate)
-                ->whereDate('date_expense', '>=', $startDate);
-        }
-
         if ($request->q) {
             $query->where('name', 'like', '%'.$request->q.'%')
             ->orWhere('description', 'like', '%'.$request->q.'%')
@@ -39,21 +31,29 @@ class ExpenseController extends Controller
             ->orWhere('amount', 'like', '%'.$request->q.'%');
         }
 
-        if (!$request->start_date) {
-            $endDate = Carbon::now();
-            $startDate = $today->subDays(30);
+        $endDate = Carbon::now()->toDateString();
+        $startDate = $today->subDays(30)->toDateString();
 
-            $query->whereDate('date_expense', '<=', $endDate)
-                ->whereDate('date_expense', '>=', $startDate);
+        if ($request->startDate != null && $request->endDate != null) {
+            $startDate = Carbon::parse($request->startDate)->toDateString();
+            $endDate = Carbon::parse($request->endDate)->toDateString();
         }
+
+        $query->whereDate('date_expense', '<=', $endDate)
+                ->whereDate('date_expense', '>=', $startDate);
 
         $limit = $request->limit ? $request->limit : 10;
         
         return inertia('Expense/Index', [
-            'expenses' => $query->paginate($limit), 
-            'start_date' => $startDate, 
-            'end_date' => $endDate, 
+            'expenses' => $query->paginate($limit),
+            '_startDate' => $startDate,
+            '_endDate' => $endDate,
             '_limit' => $limit
         ]);
+    }
+
+    public function destroy(Expense $expense)
+    {
+        $expense->delete();
     }
 }

@@ -27,6 +27,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Expense & Income Page
     Route::get('/expenses', [ExpenseController::class, 'index'])->name('expenses.index');
+    Route::delete('/expenses/{expense}', [ExpenseController::class, 'destroy'])->name('expenses.destroy');
 
     // Monitor Booking
     Route::get('/monitoring-booking', [BookingController::class, 'index'])->name('monitoring-booking.index');

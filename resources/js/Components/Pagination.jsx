@@ -45,9 +45,9 @@ export default ({ links = [], params = null }) => {
 
     return (
         <div className="flex flex-wrap mt-6 -mb-1">
-            {links.map(({ active, label, url }) => {
+            {links.map(({ active, label, url }, index) => {
                 return url === null ? (
-                    <PageInactive key={label} label={label} />
+                    <PageInactive key={`${label}-${index}`} label={label} />
                 ) : (
                     <PageLink
                         key={label}

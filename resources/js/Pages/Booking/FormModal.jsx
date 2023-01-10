@@ -232,11 +232,12 @@ export default function FormModal(props) {
                         onChange={(e) =>
                             setData('is_available', e.target.value)
                         }
+                        value={+data.is_available}
                     >
-                        <option value="0" selected={+data.is_available === 0}>
+                        <option value={0}>
                             Available
                         </option>
-                        <option value="1" selected={+data.is_available === 1}>
+                        <option value={1}>
                             Closed
                         </option>
                     </select>

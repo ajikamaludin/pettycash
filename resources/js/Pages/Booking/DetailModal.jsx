@@ -47,10 +47,10 @@ export default function DetailModal(props) {
                     <input
                         type="text"
                         placeholder="Master AWB"
-                        className={`input input-bordered ${'input-error'}`}
+                        className={`input input-bordered`}
                         name="master_awb"
-                        value={data.master_awb}
-                        disabled={true}
+                        defaultValue={data.master_awb}
+                        readOnly={true}
                     />
                     <label className="label">
                         <span className="label-text-alt"></span>
@@ -63,10 +63,10 @@ export default function DetailModal(props) {
                     <input
                         type="text"
                         placeholder="Flight Number"
-                        className={`input input-bordered ${'input-error'}`}
+                        className={`input input-bordered`}
                         name="flight_number"
-                        value={data.flight_number}
-                        disabled={true}
+                        defaultValue={data.flight_number}
+                        readOnly={true}
                     />
                     <label className="label">
                         <span className="label-text-alt"></span>
@@ -79,10 +79,10 @@ export default function DetailModal(props) {
                     <input
                         type="date"
                         placeholder="20/01/2022"
-                        className={`input input-bordered ${'input-error'}`}
+                        className={`input input-bordered`}
                         name="departure"
-                        value={data.departure}
-                        disabled={true}
+                        defaultValue={data.departure}
+                        readOnly={true}
                     />
                     <label className="label">
                         <span className="label-text-alt"></span>
@@ -95,10 +95,10 @@ export default function DetailModal(props) {
                     <input
                         type="text"
                         placeholder="Jakarta"
-                        className={`input input-bordered ${'input-error'}`}
+                        className={`input input-bordered`}
                         name="destination"
-                        value={data.destination}
-                        disabled={true}
+                        defaultValue={data.destination}
+                        readOnly={true}
                     />
                     <label className="label">
                         <span className="label-text-alt"></span>
@@ -111,10 +111,10 @@ export default function DetailModal(props) {
                     <input
                         type="text"
                         placeholder="0"
-                        className={`input input-bordered ${'input-error'}`}
+                        className={`input input-bordered`}
                         name="jumlah_koli"
-                        value={data.jumlah_koli}
-                        disabled={true}
+                        defaultValue={data.jumlah_koli}
+                        readOnly={true}
                     />
                     <label className="label">
                         <span className="label-text-alt"></span>
@@ -127,10 +127,10 @@ export default function DetailModal(props) {
                     <input
                         type="text"
                         placeholder="Pack"
-                        className={`input input-bordered ${'input-error'}`}
+                        className={`input input-bordered`}
                         name="kemasan"
-                        value={data.kemasan}
-                        disabled={true}
+                        defaultValue={data.kemasan}
+                        readOnly={true}
                     />
                     <label className="label"></label>
                 </div>
@@ -141,10 +141,10 @@ export default function DetailModal(props) {
                     <input
                         type="text"
                         placeholder="0"
-                        className={`input input-bordered ${'input-error'}`}
+                        className={`input input-bordered`}
                         name="booked"
-                        value={data.booked}
-                        disabled={true}
+                        defaultValue={data.booked}
+                        readOnly={true}
                     />
                     <label className="label"></label>
                 </div>
@@ -155,10 +155,10 @@ export default function DetailModal(props) {
                     <input
                         type="text"
                         placeholder="0"
-                        className={`input input-bordered ${'input-error'}`}
+                        className={`input input-bordered`}
                         name="used"
-                        disabled={true}
-                        value={data.used}
+                        readOnly={true}
+                        defaultValue={data.used}
                     />
                     <label className="label"></label>
                 </div>
@@ -169,10 +169,10 @@ export default function DetailModal(props) {
                     <input
                         type="text"
                         placeholder="0"
-                        className={`input input-bordered ${'input-error'}`}
+                        className={`input input-bordered`}
                         name="used"
-                        disabled={true}
-                        value={+data.is_available === 0 ? 'Available' : 'Closed'}
+                        readOnly={true}
+                        defaultValue={+data.is_available === 0 ? 'Available' : 'Closed'}
                     />
                     <label className="label"></label>
                 </div>
