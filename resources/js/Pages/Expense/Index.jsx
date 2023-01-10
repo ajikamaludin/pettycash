@@ -60,7 +60,12 @@ export default function Dashboard(props) {
         }))
     }
 
-    const checkedItems = items.filter(i => i.isChecked === true)
+    // TODO:
+    // add -> operator hanya expense, kasir expense/income
+    // edit -> menyesuaikan
+    // detail
+    // export
+    // 
 
     const handleCheckItem = (e) => {
         setItems(items.map(item => {
