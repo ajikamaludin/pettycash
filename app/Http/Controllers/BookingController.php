@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\BookingsExport;
+use App\Imports\BookingsImport;
 use App\Models\Booking;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class BookingController extends Controller
 {
-    public function index(Request $request) 
+    public function index(Request $request)
     {
         Booking::where('is_available', 0)
             ->where(DB::raw('DATE(departure)'), '<', now()->toDateString())
@@ -52,5 +55,78 @@ class BookingController extends Controller
             '_endDate' => $endDate,
             '_limit' => $limit
         ]);
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'booked' => ['required', 'numeric'],
+            'departure' => ['required'],
+            'destination' => ['required'],
+            'flight_number' => ['required'],
+            'kemasan' => ['required'],
+            'master_awb' => ['required'],
+            'used' => ['required', 'numeric'],
+            'is_available' => ['required', 'in:0,1']
+        ]);
+
+        Booking::create([
+            'master_awb' => $request->master_awb,
+            'flight_number' => $request->flight_number,
+            'departure' => $request->departure,
+            'destination' => $request->destination,
+            'kemasan' => $request->kemasan,
+            'booked' => $request->booked,
+            'used' => $request->used,
+            'is_available' => $request->is_available,
+        ]);
+
+        return redirect()->back()->with('success', 'Booking created.');
+    }
+
+    public function update(Request $request, Booking $booking)
+    {
+        $request->validate([
+            'booked' => ['required', 'numeric'],
+            'departure' => ['required'],
+            'destination' => ['required'],
+            'flight_number' => ['required'],
+            'kemasan' => ['required'],
+            'master_awb' => ['required'],
+            'used' => ['required', 'numeric'],
+            'is_available' => ['required', 'in:0,1']
+        ]);
+
+        $booking->update([
+            'master_awb' => $request->master_awb,
+            'flight_number' => $request->flight_number,
+            'departure' => $request->departure,
+            'destination' => $request->destination,
+            'kemasan' => $request->kemasan,
+            'booked' => $request->booked,
+            'used' => $request->used,
+            'is_available' => $request->is_available,
+        ]);
+
+        return redirect()->back()->with('success', 'Booking updated.');
+    }
+
+    public function destroy(Booking $booking)
+    {
+        $booking->delete();
+    }
+
+    public function export()
+    {
+        return Excel::download(new BookingsExport, 'bookings.xlsx');
+    }
+
+    public function import(Request $request)
+    {
+        if (request()->file('file_booking_import') != null) {
+            Excel::import(new BookingsImport, request()->file('file_booking_import'));
+        }
+
+        return redirect()->route('monitoring-booking.index');
     }
 }

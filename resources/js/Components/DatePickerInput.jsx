@@ -1,30 +1,32 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";  
 
 export const DatePickerRangeInput = ({
     startDate,
-    setStartDate,
     endDate,
-    setEndDate,
+    setFilterDate
 }) => {
-    
-    if(typeof(endDate) === 'string') {
-        endDate = new Date(endDate)
+    const [_startDate, setStartDate] = useState(startDate)
+    const [_endDate, setEndDate] = useState(typeof(endDate) === 'string' ? new Date(endDate) : endDate)
+
+    const handleDateChanges = (dates) => {
+        const [start, end] = dates;
+        setStartDate(start);
+        setEndDate(end);
+        if (end !== null) {
+            setFilterDate(dates)
+        }
     }
 
     return (
         <div className="flex space-x-1">
             <div className="relative">
                 <DatePicker
-                    selected={startDate}
-                    onChange={(dates) => {
-                        const [start, end] = dates;
-                        setStartDate(start);
-                        setEndDate(end);
-                    }}
+                    selected={_startDate}
+                    onChange={handleDateChanges}
                     selectsRange
-                    startDate={startDate}
-                    endDate={endDate}
+                    startDate={_startDate}
+                    endDate={_endDate}
                     nextMonthButtonLabel=">"
                     previousMonthButtonLabel="<"
                     popperClassName="react-datepicker-left"

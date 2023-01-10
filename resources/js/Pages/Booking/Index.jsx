@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { usePrevious } from "react-use";
 import { Inertia } from "@inertiajs/inertia";
+import qs from 'qs'
 
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import Pagination from "@/Components/Pagination";
+import ModalConfirm from "@/Components/ModalConfirm";
+import FormModal from './FormModal';
+import DetailModal from './DetailModal';
+import ImportModal from './ImportModal';
 import { DatePickerRangeInput } from "@/Components/DatePickerInput";
 import { useModalState } from "@/Hook";
 import { Head } from '@inertiajs/inertia-react';
@@ -13,8 +18,9 @@ import { toast } from 'react-toastify';
 export default function Dashboard(props) {
     const { _startDate, _endDate, _limit } = props
 
-    const [startDate, setStartDate] = useState(_startDate)
-    const [endDate, setEndDate] = useState(_endDate)
+    const [startDate] = useState(_startDate)
+    const [endDate] = useState(_endDate)
+    const [filterDate, setFilterDate] = useState([_startDate, _endDate])
     
     const { data: bookings, links } = props.booking;
     const [bookingsChecked, setBookingsChecked] = useState(
@@ -28,13 +34,12 @@ export default function Dashboard(props) {
 
     const [search, setSearch] = useState("");
     const [limit, setLimit] = useState(_limit)
-    const preValue = usePrevious(`${search}-${startDate}-${endDate}-${limit}`);
-    const [booking, setBooking] = useState(null);
-    const [ids, setIds] = useState({});
+    const preValue = usePrevious(`${search}-${filterDate[0]}-${filterDate[1]}-${limit}`);
 
+    const [booking, setBooking] = useState(null);
 
     const formModal = useModalState(false);
-    const handleEdit = (booking = null) => {
+    const handleToggleForm = (booking = null) => {
         setBooking(booking);
         formModal.toggle();
     };
@@ -52,7 +57,7 @@ export default function Dashboard(props) {
     };
 
     const bookingModal = useModalState(false);
-    const handleBooking = () => {
+    const handleImport = () => {
         bookingModal.toggle();
     };
 
@@ -82,8 +87,8 @@ export default function Dashboard(props) {
         );
     };
 
-    const handleMouseOverExport = () => {
-        let params = bookingsChecked
+    const handleExport = () => {
+        const params = bookingsChecked
             .map((booking) => {
                 if (booking.isChecked) {
                     return booking.id;
@@ -93,7 +98,17 @@ export default function Dashboard(props) {
                 return isChecked !== undefined;
             });
 
-        setIds(params);
+        fetch(route('monitoring-booking.export') +'?'+ qs.stringify({ids: params}, { encodeValuesOnly:true }))
+        .then( res => res.blob() )
+        .then( blob => {
+            var file = window.URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = file;
+            a.download = "bookings.xlsx";
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+        });
     };
 
     const handleCheckAll = (e) => {
@@ -107,7 +122,12 @@ export default function Dashboard(props) {
         });
     };
 
-    const params = { ids };
+    const params = {
+        q: search,
+        startDate: filterDate[0], 
+        endDate: filterDate[1],
+        limit,
+    };
 
     useEffect(() => {
         setBookingsChecked(
@@ -124,14 +144,14 @@ export default function Dashboard(props) {
         if (preValue) {
             Inertia.get(
                 route(route().current()),
-                { q: search, startDate, endDate, limit },
+                { q: search, startDate: filterDate[0], endDate: filterDate[1], limit },
                 {
                     replace: true,
                     preserveState: true,
                 }
             )
         }
-    }, [search, startDate, endDate, limit])
+    }, [search, filterDate, limit])
 
     return (
         <AuthenticatedLayout
@@ -142,12 +162,12 @@ export default function Dashboard(props) {
 
             <div className="p-4">
                 <div className="mx-auto max-w-7xl p-4 bg-white overflow-hidden shadow-sm sm:rounded-lg min-h-screen">
-                    <div className='flex justify-between space-x-0 lg:space-x-1 flex-row mb-2'>
+                    <div className='flex justify-between space-x-1 flex-row mb-2'>
                         <div className='flex space-x-1'>
-                            <div className='btn'>Tambah</div>
-                            <div className='btn'>Import Excel</div>
+                            <div className='btn' onClick={() => handleToggleForm()}>Tambah</div>
+                            <div className='btn' onClick={handleImport}>Import</div>
                         </div>
-                        <div className='btn'>Export Excel</div>
+                        <div className='btn' onClick={() => handleExport()}>Export</div>
                     </div>
                     <div className='flex justify-between space-y-1 lg:space-y-0 space-x-0 lg:space-x-1 flex-col lg:flex-row'>
                         <div>
@@ -159,13 +179,17 @@ export default function Dashboard(props) {
                             <div className='flex space-x-1'>
                                 <DatePickerRangeInput
                                     startDate={new Date(startDate)}
-                                    setStartDate={setStartDate}
                                     endDate={endDate}
-                                    setEndDate={setEndDate}
+                                    setFilterDate={setFilterDate}
                                 />
                             </div>
                             <div>
-                                <input className='input input-bordered w-full' placeholder='search'/>
+                                <input 
+                                    className='input input-bordered w-full' 
+                                    placeholder='search'
+                                    value={search}
+                                    onChange={e => setSearch(e.target.value)}
+                                />
                             </div>
                         </div>
                     </div>
@@ -226,7 +250,7 @@ export default function Dashboard(props) {
                                             </button>
                                             <button
                                                 className="btn btn-neutral btn-xs"
-                                                onClick={() => handleEdit(booking)}
+                                                onClick={() => handleToggleForm(booking)}
                                             >
                                                 Edit
                                             </button>
@@ -246,12 +270,7 @@ export default function Dashboard(props) {
                     <div className="flex mx-auto items-end mt-4">
                         <Pagination
                             links={links}
-                            params={{
-                                q: search,
-                                startDate,
-                                endDate,
-                                limit,
-                            }}
+                            params={params}
                         />
                         <div>
                             <select
@@ -268,6 +287,26 @@ export default function Dashboard(props) {
                     </div>
                 </div>
             </div>
+            <ModalConfirm
+                isOpen={confirmModal.isOpen}
+                toggle={confirmModal.toggle}
+                onConfirm={onDelete}
+            />
+            <FormModal
+                isOpen={formModal.isOpen}
+                toggle={formModal.toggle}
+                booking={booking}
+            />
+            <DetailModal
+                isOpen={detailModal.isOpen}
+                toggle={detailModal.toggle}
+                booking={booking}
+                title="Detail Booking"
+            />
+            <ImportModal
+                isOpen={bookingModal.isOpen}
+                toggle={bookingModal.toggle}
+            />
         </AuthenticatedLayout>
     );
 }

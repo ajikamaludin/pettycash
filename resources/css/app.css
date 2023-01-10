@@ -98,3 +98,25 @@
 .react-datepicker__day--range-end {
     @apply bg-blue-500 text-white hover:text-gray-700 hover:bg-white;
 }
+
+
+/* width */
+::-webkit-scrollbar {
+	width: 10px;
+	height: 70%;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+	background: rgb(136 136 136 / 28%);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+	background: #888; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+	background: rgb(241 241 241 / 12%);
+}

@@ -10,7 +10,7 @@ export default function Dashboard(props) {
             <Head title="Expense" />
 
             <div className="p-4">
-                <div className="mx-auto max-w-7xl p-2 bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div className="mx-auto max-w-7xl p-4 bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div className='flex justify-between space-x-0 lg:space-x-1 flex-row mb-2'>
                         <div className='btn'>Tambah</div>
                         <div className='btn'>Export Excel</div>

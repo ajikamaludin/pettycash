@@ -30,6 +30,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Monitor Booking
     Route::get('/monitoring-booking', [BookingController::class, 'index'])->name('monitoring-booking.index');
+    Route::post('/monitoring-booking', [BookingController::class, 'store'])->name('monitoring-booking.store');
+    Route::put('/monitoring-booking/{booking}', [BookingController::class, 'update'])->name('monitoring-booking.update');
+    Route::delete('/monitoring-booking/{booking}', [BookingController::class, 'destroy'])->name('monitoring-booking.destroy');
+    Route::get('/monitoring-booking/export', [BookingController::class, 'export'])->name('monitoring-booking.export');
+    Route::post('/monitoring-booking/import', [BookingController::class, 'import'])->name('monitoring-booking.import');
 });
 
 
