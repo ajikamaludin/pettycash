@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\BookingController;
+use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -20,9 +22,16 @@ Route::get('/', function () {
     return redirect()->route('login');
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/dashboard', fn () => redirect()->route('expenses.index'))->name('dashboard');
+
+    // Expense & Income Page
+    Route::get('/expenses', [ExpenseController::class, 'index'])->name('expenses.index');
+
+    // Monitor Booking
+    Route::get('/monitoring-booking', [BookingController::class, 'index'])->name('monitoring-booking.index');
+});
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

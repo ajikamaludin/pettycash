@@ -3,11 +3,9 @@ import Checkbox from '@/Components/Checkbox';
 import GuestLayout from '@/Layouts/GuestLayout';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
-import { Head, Link, useForm } from '@inertiajs/inertia-react';
+import { Head, useForm } from '@inertiajs/inertia-react';
 
-export default function Login({ status, canResetPassword }) {
+export default function Login({ status }) {
     const { data, setData, post, processing, errors, reset } = useForm({
         email: '',
         password: '',
@@ -40,15 +38,14 @@ export default function Login({ status, canResetPassword }) {
                 <div>
                     <InputLabel forInput="email" value="Email" />
 
-                    <TextInput
-                        id="email"
-                        type="email"
+                    <input 
+                        type="text" 
+                        className="input input-bordered w-full" 
                         name="email"
                         value={data.email}
-                        className="mt-1 block w-full"
+                        onChange={onHandleChange}
                         autoComplete="username"
-                        isFocused={true}
-                        handleChange={onHandleChange}
+                        autoFocus={true}
                     />
 
                     <InputError message={errors.email} className="mt-2" />
@@ -57,14 +54,12 @@ export default function Login({ status, canResetPassword }) {
                 <div className="mt-4">
                     <InputLabel forInput="password" value="Password" />
 
-                    <TextInput
-                        id="password"
+                    <input 
                         type="password"
+                        className="input input-bordered w-full" 
                         name="password"
                         value={data.password}
-                        className="mt-1 block w-full"
-                        autoComplete="current-password"
-                        handleChange={onHandleChange}
+                        onChange={onHandleChange}
                     />
 
                     <InputError message={errors.password} className="mt-2" />
@@ -78,18 +73,9 @@ export default function Login({ status, canResetPassword }) {
                 </div>
 
                 <div className="flex items-center justify-end mt-4">
-                    {canResetPassword && (
-                        <Link
-                            href={route('password.request')}
-                            className="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                        >
-                            Forgot your password?
-                        </Link>
-                    )}
-
-                    <PrimaryButton className="ml-4" processing={processing}>
+                    <button className='btn' disabled={processing}>
                         Log in
-                    </PrimaryButton>
+                    </button>
                 </div>
             </form>
         </GuestLayout>

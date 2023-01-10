@@ -6,7 +6,10 @@ export default function Guest({ children }) {
         <div className="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
             <div>
                 <Link href="/">
-                    <ApplicationLogo className="w-20 h-20 fill-current text-gray-500" />
+                    <img src="/img/yamato-cash-portal-icon.png" className="w-32 h-auto mx-auto" alt="logo Yamato Operation Portal"/>
+                    <div className="font-bold text-2xl p-8">
+                        Yamato Operation Portal
+                    </div>
                 </Link>
             </div>
 

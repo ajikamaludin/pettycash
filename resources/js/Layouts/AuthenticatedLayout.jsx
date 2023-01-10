@@ -4,8 +4,9 @@ import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link } from '@inertiajs/inertia-react';
+import { ToastContainer } from 'react-toastify';
 
-export default function Authenticated({ auth, header, children }) {
+export default function Authenticated({ auth, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
 
     return (
@@ -21,9 +22,14 @@ export default function Authenticated({ auth, header, children }) {
                             </div>
 
                             <div className="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                                <NavLink href={route('dashboard')} active={route().current('dashboard')}>
-                                    Dashboard
+                                <NavLink href={route('expenses.index')} active={route().current('expenses.index')}>
+                                    Expense Tracking
                                 </NavLink>
+                                {auth.user.role === "2" && (
+                                    <NavLink href={route('monitoring-booking.index')} active={route().current('monitoring-booking.index')}>
+                                        Monitoring Booking
+                                    </NavLink>
+                                )}
                             </div>
                         </div>
 
@@ -92,9 +98,14 @@ export default function Authenticated({ auth, header, children }) {
 
                 <div className={(showingNavigationDropdown ? 'block' : 'hidden') + ' sm:hidden'}>
                     <div className="pt-2 pb-3 space-y-1">
-                        <ResponsiveNavLink href={route('dashboard')} active={route().current('dashboard')}>
-                            Dashboard
+                        <ResponsiveNavLink href={route('expenses.index')} active={route().current('expenses.index')}>
+                            Expense Tracking
                         </ResponsiveNavLink>
+                        {auth.user.role === "2" && (
+                            <ResponsiveNavLink href={route('monitoring-booking.index')} active={route().current('monitoring-booking.index')}>
+                                Monitoring Booking
+                            </ResponsiveNavLink>
+                        )}
                     </div>
 
                     <div className="pt-4 pb-1 border-t border-gray-200">
@@ -115,13 +126,23 @@ export default function Authenticated({ auth, header, children }) {
                 </div>
             </nav>
 
-            {header && (
-                <header className="bg-white shadow">
-                    <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">{header}</div>
-                </header>
-            )}
+            <header className="bg-white shadow">
+                <div className="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">Yamato Cash Management</div>
+            </header>
 
             <main>{children}</main>
+            <ToastContainer 
+                position="top-right"
+                autoClose={5000}
+                theme='colored'
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
         </div>
     );
 }
