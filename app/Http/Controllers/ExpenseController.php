@@ -15,7 +15,7 @@ class ExpenseController extends Controller
 {
     public function index(Request $request)
     {
-        $isAdmin = Auth::user()->role === User::ROLE_CASIER;
+        $isAdmin = Auth::user()->role == User::ROLE_CASIER;
         $today = Carbon::now();
         $query = Expense::query();
         
@@ -25,6 +25,10 @@ class ExpenseController extends Controller
 
         if (!$isAdmin) {
             $query->where('isIncome', 0)->orderBy('created_at', 'DESC');
+        }
+
+        if (Auth::user()->role == User::ROLE_MANAJEMEN) {
+            $query->where('is_paid', Expense::IS_PAID_DRAFT);
         }
 
         if ($request->q != null) {
