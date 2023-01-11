@@ -70,7 +70,7 @@ export default function FormModal(props) {
                 job_number: expense?.job_number,
                 date_expense: new Date(expense?.date_expense),
                 amount: expense?.amount,
-                isIncome: expense?.isIncome,
+                isIncome: +expense?.isIncome,
                 is_paid: expense?.is_paid,
             })
             return 
