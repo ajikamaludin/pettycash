@@ -217,7 +217,7 @@ const Print = React.forwardRef((props, ref) => {
                             <div className="flex justify-center items-end min-h-full">
                                 {`Rp.` +
                                     formatIDR(
-                                        expenses
+                                        items
                                             .map((a) => a.amount)
                                             .reduce((a, b) => +a + +b, 0)
                                     )}
