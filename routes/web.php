@@ -27,7 +27,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Expense & Income Page
     Route::get('/expenses', [ExpenseController::class, 'index'])->name('expenses.index');
+    Route::post('/expenses', [ExpenseController::class, 'store'])->name('expenses.store');
+    Route::put('/expenses/{expense}', [ExpenseController::class, 'update'])->name('expenses.update');
+    Route::put('/expenses/{expense}/{status}', [ExpenseController::class, 'decision'])->name('expenses.decision');
     Route::delete('/expenses/{expense}', [ExpenseController::class, 'destroy'])->name('expenses.destroy');
+    Route::get('expenses/export', [ExpenseController::class, 'export'])->name('expenses.export');
+
 
     // Monitor Booking
     Route::get('/monitoring-booking', [BookingController::class, 'index'])->name('monitoring-booking.index');

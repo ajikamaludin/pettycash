@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import ReactToPrint from 'react-to-print';
+import qs from 'qs'
 import { Inertia } from '@inertiajs/inertia';
-import { Head, usePage, useForm } from '@inertiajs/inertia-react';
+import { Link } from '@inertiajs/inertia-react';
+import { Head } from '@inertiajs/inertia-react';
 import { usePrevious } from 'react-use';
 import { toast } from 'react-toastify';
 
@@ -9,24 +11,20 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import Pagination from '@/Components/Pagination';
 import Print from './Print';
 import ModalConfirm from '@/Components/ModalConfirm';
+import FormModal from './FormModal';
 import { DatePickerRangeInput } from '@/Components/DatePickerInput';
 import { useModalState } from '@/Hook';
 import { formatDate, formatIDR } from '@/Utils';
 
 
 export default function Dashboard(props) {
-    const { auth, expenses: { data, links, total, last_page }, _startDate, _endDate, _limit } = props
+    const { auth, expenses: { data, links, total, last_page }, _startDate, _endDate, _limit, _q } = props
     
-    const [items, setItems] = useState(data.map(item => {
-        return {
-            ...item, 
-            isChecked: false
-        }
-    }))
+    const [items, setItems] = useState([])
     const [startDate] = useState(_startDate)
     const [endDate] = useState(_endDate)
     const [filterDate, setFilterDate] = useState([_startDate, _endDate])
-    const [search, setSearch] = useState("");
+    const [search, setSearch] = useState(_q);
     const [limit, setLimit] = useState(_limit)
     const preValue = usePrevious(`${search}-${filterDate[0]}-${filterDate[1]}-${limit}`);
 
@@ -60,6 +58,12 @@ export default function Dashboard(props) {
         }))
     }
 
+    const formModal = useModalState()
+    const toggle = (expense = null) => {
+        formModal.setData(expense)
+        formModal.toggle()
+    }
+
     // TODO:
     // add -> operator hanya expense, kasir expense/income
     // edit -> menyesuaikan
@@ -78,6 +82,30 @@ export default function Dashboard(props) {
             return item
         }))
     }
+
+    const handleExport = () => {
+        const params = items
+            .map((item) => {
+                if (item.isChecked) {
+                    return item.id;
+                }
+            })
+            .filter((isChecked) => {
+                return isChecked !== undefined;
+            });
+
+        fetch(route('expenses.export') +'?'+ qs.stringify({ids: params, start_date: filterDate[0], end_date: filterDate[1]}, { encodeValuesOnly:true }))
+        .then( res => res.blob() )
+        .then( blob => {
+            var file = window.URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = file;
+            a.download = "expenses.xlsx";
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+        });
+    };
 
     const confirmModal = useModalState(false);
     const handleDelete = (expense) => {
@@ -116,6 +144,15 @@ export default function Dashboard(props) {
         }
     }, [search, filterDate, limit])
 
+    useEffect(() => {
+        setItems(data.map(item => {
+            return {
+                ...item, 
+                isChecked: false
+            }
+        }))
+    }, [data])
+
     return (
         <AuthenticatedLayout
             auth={props.auth}
@@ -126,9 +163,19 @@ export default function Dashboard(props) {
             <div className="p-4">
                 <div className="mx-auto max-w-7xl p-4 bg-white overflow-hidden shadow-sm sm:rounded-lg">
                     <div className='flex justify-between space-x-0 lg:space-x-1 flex-row mb-2'>
-                        <div className='btn'>Tambah</div>
+                        <div 
+                            className='btn'
+                            onClick={() => toggle()}
+                        >
+                            Tambah
+                        </div>
                         {+auth.user.role === 1 ? (
-                            <div className='btn'>Export Excel</div>
+                            <div 
+                                className='btn'
+                                onClick={handleExport}
+                            >
+                                Export Excel
+                            </div>
                         ) : (
                             <div 
                                 className='btn'
@@ -178,7 +225,7 @@ export default function Dashboard(props) {
                                     <th>Tanggal</th>
                                     <th>Name</th>
                                     <th>Job Number</th>
-                                    <th>Description</th>
+                                    <th className='w-10'>Description</th>
                                     <th>Amount</th>
                                     <th>Status</th>
                                     <th>Opsi</th>
@@ -214,32 +261,52 @@ export default function Dashboard(props) {
                                             <td className="text-sm text-gray-500">
                                                 {expense.description}
                                             </td>
-                                            <td className="text-sm text-gray-500">
-                                                {+expense.isIncome === 0 ? '-' : '+'}
+                                            <td className="text-sm text-right text-gray-500">
                                                 {formatIDR(expense.amount)}
                                             </td>
                                             <td>
-                                                {+expense.is_paid === 0 ? 'Unpaid' : 'Paid'}
+                                                {expense.status}
                                             </td>
                                             <td className="flex gap-1  text-sm text-gray-500">
-                                                <button
-                                                    onClick={() => {}}
-                                                    className="btn btn-xs"
-                                                >
-                                                    Detail
-                                                </button>
-                                                <button
-                                                    onClick={() => {}}
-                                                    className="btn btn-xs"
-                                                >
-                                                    Edit
-                                                </button>
-                                                <button
-                                                    onClick={() => handleDelete(expense)}
-                                                    className="btn btn-xs"
-                                                >
-                                                    Hapus
-                                                </button>
+                                                {+auth.user.role === 3 ? (
+                                                    <>
+                                                        <Link 
+                                                            href={route('expenses.decision', [expense.id, 2])}
+                                                            method="put"
+                                                            className="btn btn-xs"
+                                                        >
+                                                            Approve
+                                                        </Link>
+                                                        <Link 
+                                                            href={route('expenses.decision', [expense.id, 3])}
+                                                            method="put"
+                                                            className="btn btn-xs"
+                                                        >
+                                                            Reject
+                                                        </Link>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <button
+                                                            onClick={() => {}}
+                                                            className="btn btn-xs"
+                                                        >
+                                                            Detail
+                                                        </button>
+                                                        <button
+                                                            onClick={() => toggle(expense)}
+                                                            className="btn btn-xs"
+                                                        >
+                                                            Edit
+                                                        </button>
+                                                        <button
+                                                            onClick={() => handleDelete(expense)}
+                                                            className="btn btn-xs"
+                                                        >
+                                                            Hapus
+                                                        </button>
+                                                    </>
+                                                )}
                                             </td>
                                         </tr>
                                     )
@@ -292,6 +359,9 @@ export default function Dashboard(props) {
                 isOpen={confirmModal.isOpen}
                 toggle={confirmModal.toggle}
                 onConfirm={onDelete}
+            />
+            <FormModal
+                modalState={formModal}
             />
         </AuthenticatedLayout>
     );

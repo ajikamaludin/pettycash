@@ -9,11 +9,11 @@ class Expense extends Model
 {
     use HasFactory;
 
-    const IS_PAID_DRAFT = 1;
-    const IS_PAID_UNPAID = 1;
-    const IS_PAID_PAID = 2;
-    const IS_PAID_APPROVE = 3;
-    const IS_PAID_REJECT = 4;
+    const IS_PAID_DRAFT = 0;
+    const IS_PAID_UNPAID = 0;
+    const IS_PAID_PAID = 1;
+    const IS_PAID_APPROVE = 2;
+    const IS_PAID_REJECT = 3;
 
     /**
      * The attributes that are mass assignable.
@@ -30,4 +30,16 @@ class Expense extends Model
         'isIncome',
         'is_paid',
     ];
+
+    protected $appends = ['status'];
+
+    public function getStatusAttribute()
+    {
+        return [
+            self::IS_PAID_DRAFT => 'Draft',
+            self::IS_PAID_PAID => 'Paid',
+            self::IS_PAID_APPROVE => 'Approve',
+            self::IS_PAID_REJECT => 'Reject',
+        ][$this->is_paid];
+    }
 }

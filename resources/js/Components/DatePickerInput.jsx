@@ -35,3 +35,21 @@ export const DatePickerRangeInput = ({
         </div>
     );
 };
+
+export const DatePickerInput = ({
+    value,
+    onChange,
+}) => {
+    return (
+        <div className="relative w-full">
+            <DatePicker
+                selected={value}
+                onChange={onChange}
+                nextMonthButtonLabel=">"
+                previousMonthButtonLabel="<"
+                popperClassName="react-datepicker-left"
+                dateFormat={'dd-MM-yyyy'}
+            />
+        </div>
+    )
+}

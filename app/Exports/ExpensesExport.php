@@ -11,11 +11,11 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 
 class ExpensesExport implements WithHeadings, FromView
 {
+    public $begining_balance = 0;
+
     public function view(): View
     {
-        $this->begining_balance = 0;
-        $expenses = Expense::all();
-        $today = \Carbon\Carbon::now();
+        $today = now();
 
         $query = Expense::query()->orderBy('date_expense', 'ASC');
 

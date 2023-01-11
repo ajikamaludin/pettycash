@@ -161,7 +161,7 @@ export default function Dashboard(props) {
             <Head title="Booking" />
 
             <div className="p-4">
-                <div className="mx-auto max-w-7xl p-4 bg-white overflow-hidden shadow-sm sm:rounded-lg min-h-screen">
+                <div className="mx-auto max-w-7xl p-4 bg-white overflow-hidden shadow-sm sm:rounded-lg" style={{minHeight: '500px'}}>
                     <div className='flex justify-between space-x-1 flex-row mb-2'>
                         <div className='flex space-x-1'>
                             <div className='btn' onClick={() => handleToggleForm()}>Tambah</div>
