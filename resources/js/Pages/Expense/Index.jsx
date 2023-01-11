@@ -12,6 +12,7 @@ import Pagination from '@/Components/Pagination';
 import Print from './Print';
 import ModalConfirm from '@/Components/ModalConfirm';
 import FormModal from './FormModal';
+import DetailModal from './DetailModal';
 import { DatePickerRangeInput } from '@/Components/DatePickerInput';
 import { useModalState } from '@/Hook';
 import { formatDate, formatIDR } from '@/Utils';
@@ -64,12 +65,11 @@ export default function Dashboard(props) {
         formModal.toggle()
     }
 
-    // TODO:
-    // add -> operator hanya expense, kasir expense/income
-    // edit -> menyesuaikan
-    // detail
-    // export
-    // 
+    const detailModal = useModalState()
+    const handleDetail = (expense) => {
+        detailModal.setData(expense)
+        detailModal.toggle()
+    }
 
     const handleCheckItem = (e) => {
         setItems(items.map(item => {
@@ -288,7 +288,7 @@ export default function Dashboard(props) {
                                                 ) : (
                                                     <>
                                                         <button
-                                                            onClick={() => {}}
+                                                            onClick={() => handleDetail(expense)}
                                                             className="btn btn-xs"
                                                         >
                                                             Detail
@@ -362,6 +362,9 @@ export default function Dashboard(props) {
             />
             <FormModal
                 modalState={formModal}
+            />
+            <DetailModal
+                modalState={detailModal}
             />
         </AuthenticatedLayout>
     );
