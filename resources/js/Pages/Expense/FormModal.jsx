@@ -17,7 +17,7 @@ export default function FormModal(props) {
         date_expense: new Date(),
         amount: "",
         isIncome: 0,
-        is_paid: 0,
+        is_paid: 4,
     })
 
     const setType = (type) => {
@@ -166,7 +166,8 @@ export default function FormModal(props) {
                         value={data.is_paid}
                         onChange={handleOnChange}
                     >
-                        <option value="0">Draft</option>
+                        <option value="4">Draft</option>
+                        <option value="0">Unpaid</option>
                         <option value="1">Paid</option>
                         <option value="2">Approve</option>
                         <option value="3">Reject</option>

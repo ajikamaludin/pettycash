@@ -262,6 +262,7 @@ export default function Dashboard(props) {
                                                 {expense.description}
                                             </td>
                                             <td className="text-sm text-right text-gray-500">
+                                                {+expense.isIncome === 1 ? '+' : '-'}
                                                 {formatIDR(expense.amount)}
                                             </td>
                                             <td>

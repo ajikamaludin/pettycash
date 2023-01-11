@@ -65,15 +65,18 @@ class ExpenseController extends Controller
             'description' => ['required'],
             'date_expense' => ['required', 'date'],
             'amount' => ['required', 'numeric'],
-            'is_paid' => ['required', 'in:0,1,2,3'],
+            'is_paid' => ['required', 'in:0,1,2,3,4'],
             'isIncome' => ['required', 'in:0,1'],
         ]);
 
+        $is_paid = $request->is_paid;
         if ($request->isIncome === 0) {
             $request->validate([
                 'name' => ['required'],
                 'job_number' => ['required'],
             ]);
+        } else {
+            $is_paid = Expense::IS_PAID_PAID;
         }
 
         Expense::create([
@@ -82,7 +85,7 @@ class ExpenseController extends Controller
             'job_number' => $request->job_number,
             'date_expense' => Carbon::parse($request->date_expense)->toDateString(),
             'amount' => $request->amount,
-            'is_paid' => $request->is_paid,
+            'is_paid' => $is_paid,
             'isIncome' => $request->isIncome,
         ]);
 
@@ -95,15 +98,18 @@ class ExpenseController extends Controller
             'description' => ['required'],
             'date_expense' => ['required', 'date'],
             'amount' => ['required', 'numeric'],
-            'is_paid' => ['required', 'in:0,1,2,3'],
+            'is_paid' => ['required', 'in:0,1,2,3,4'],
             'isIncome' => ['required', 'in:0,1'],
         ]);
 
+        $is_paid = $request->is_paid;
         if ($request->isIncome === 0) {
             $request->validate([
                 'name' => ['required'],
                 'job_number' => ['required'],
             ]);
+        } else {
+            $is_paid = Expense::IS_PAID_PAID;
         }
 
         $expense->update([
@@ -112,7 +118,7 @@ class ExpenseController extends Controller
             'job_number' => $request->job_number,
             'date_expense' => Carbon::parse($request->date_expense)->toDateString(),
             'amount' => $request->amount,
-            'is_paid' => $request->is_paid,
+            'is_paid' => $is_paid,
             'isIncome' => $request->isIncome,
         ]);
 

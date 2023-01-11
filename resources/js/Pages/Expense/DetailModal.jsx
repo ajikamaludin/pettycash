@@ -15,7 +15,7 @@ export default function FormModal(props) {
         date_expense: new Date(),
         amount: "",
         isIncome: 0,
-        is_paid: 0,
+        is_paid: 4,
         status: ""
     })
 
