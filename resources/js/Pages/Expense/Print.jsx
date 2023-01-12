@@ -46,7 +46,7 @@ const Print = React.forwardRef((props, ref) => {
 
     return (
         <>
-            <div ref={ref} className="p-1">
+            <div ref={ref} className="p-1 bg-white">
                 <Table>
                     <thead>
                         <tr>
