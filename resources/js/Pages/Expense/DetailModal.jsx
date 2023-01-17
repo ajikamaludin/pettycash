@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import Modal from "@/Components/Modal";
-import { useForm, usePage } from "@inertiajs/inertia-react";
+import { useForm, usePage } from "@inertiajs/react";
 import { formatDate, formatIDR } from "@/Utils";
 
 export default function FormModal(props) {

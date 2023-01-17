@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { usePrevious } from "react-use";
-import { Inertia } from "@inertiajs/inertia";
+import { router } from '@inertiajs/react'
 import qs from 'qs'
 
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
@@ -11,7 +11,7 @@ import DetailModal from './DetailModal';
 import ImportModal from './ImportModal';
 import { DatePickerRangeInput } from "@/Components/DatePickerInput";
 import { useModalState } from "@/Hook";
-import { Head } from '@inertiajs/inertia-react';
+import { Head } from '@inertiajs/react';
 import { formatDate } from "@/Utils";
 import { toast } from 'react-toastify';
 
@@ -64,7 +64,7 @@ export default function Dashboard(props) {
     const onDelete = () => {
         const booking = confirmModal.data;
         if (booking != null) {
-            Inertia.delete(
+            router.delete(
                 route("monitoring-booking.destroy", booking), {
                     onSuccess: () => toast.success("item deleted"),
                 }
@@ -142,7 +142,7 @@ export default function Dashboard(props) {
 
     useEffect(() => {
         if (preValue) {
-            Inertia.get(
+            router.get(
                 route(route().current()),
                 { q: search, startDate: filterDate[0], endDate: filterDate[1], limit },
                 {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import ReactToPrint from "react-to-print";
-import { Head, useForm } from "@inertiajs/inertia-react";
+import { Head, useForm } from "@inertiajs/react";
 import styled from "styled-components";
 import { formatIDR } from "@/Utils";
 

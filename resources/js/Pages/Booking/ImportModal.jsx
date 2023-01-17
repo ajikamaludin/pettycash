@@ -1,4 +1,4 @@
-import { useForm } from "@inertiajs/inertia-react";
+import { useForm } from "@inertiajs/react";
 import React, { useRef } from "react";
 
 export default function ImportModal(props) {

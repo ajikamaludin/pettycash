@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import ReactToPrint from 'react-to-print';
 import qs from 'qs'
-import { Inertia } from '@inertiajs/inertia';
-import { Link } from '@inertiajs/inertia-react';
-import { Head } from '@inertiajs/inertia-react';
+import { router } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
+import { Head } from '@inertiajs/react';
 import { usePrevious } from 'react-use';
 import { toast } from 'react-toastify';
 
@@ -116,7 +116,7 @@ export default function Dashboard(props) {
     const onDelete = () => {
         const expense = confirmModal.data;
         if (expense != null) {
-            Inertia.delete(
+            router.delete(
                 route("expenses.destroy", expense), {
                     onSuccess: () => toast.success("item deleted"),
                 }

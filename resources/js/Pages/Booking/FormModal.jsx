@@ -1,4 +1,4 @@
-import { useForm } from "@inertiajs/inertia-react";
+import { useForm } from "@inertiajs/react";
 import React, { useEffect } from "react";
 import { formatDate } from "@/Utils";
 

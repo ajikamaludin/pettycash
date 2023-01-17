@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Modal from "@/Components/Modal";
 import InputError from "@/Components/InputError";
 import { DatePickerInput } from "@/Components/DatePickerInput";
-import { useForm, usePage } from "@inertiajs/inertia-react";
+import { useForm, usePage } from "@inertiajs/react";
 import { toast } from "react-toastify";
 
 export default function FormModal(props) {
