@@ -1,7 +1,6 @@
 # Yamato Cash Management - Laravel Inertijs
 
-Laravel Cash Management Example with Inertia V1.0.0 :tada:
-UI - Kit [daisyui](https://daisyui.com/)
+Laravel Cash Management Example with Inertia V1.0.0  :tada:  with UI - Kit [daisyui](https://daisyui.com/)
 
 ## Support me
 
