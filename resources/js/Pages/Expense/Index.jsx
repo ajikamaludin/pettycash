@@ -133,7 +133,7 @@ export default function Dashboard(props) {
 
     useEffect(() => {
         if (preValue) {
-            Inertia.get(
+            router.get(
                 route(route().current()),
                 { q: search, startDate: filterDate[0], endDate: filterDate[1], limit },
                 {

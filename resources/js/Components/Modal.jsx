@@ -14,7 +14,7 @@ export default function Modal({ isOpen, toggle = () => {}, children, title = ''}
                     }
                     : {}
         }>
-            <div className={`modal-box`} style={{minHeight: '40em'}}>
+            <div className={`modal-box`} style={{minHeight: '60em'}}>
                 <h1 className="font-bold text-2xl pb-8">
                     {title}
                 </h1>

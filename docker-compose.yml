@@ -1,0 +1,78 @@
+version: "3.7"
+services:
+  app:
+      build:
+        args:
+          user: aji
+          uid: 1000
+        context: ./
+        dockerfile: ./Dockerfile
+      image: pettycash
+      container_name: pettycash-app
+      working_dir: /var/www/
+      volumes:
+        - ./:/var/www
+        - "/etc/timezone:/etc/timezone:ro"
+        - "/etc/localtime:/etc/localtime:ro"
+      mem_limit: 512m
+      mem_reservation: 128M
+      cpus: 0.5
+      networks:
+        - pettycash
+  nginx:
+    image: nginx:1.17-alpine
+    container_name: pettycash-nginx
+    ports:
+      - 8000:80
+    volumes:
+      - ./:/var/www
+      - ./default.conf:/etc/nginx/conf.d/default.conf
+    mem_limit: 512m
+    mem_reservation: 128M
+    cpus: 0.5
+    networks:
+      - pettycash
+  db:
+    image: mariadb:latest
+    container_name: pettycash-db
+    ports:
+      - 3306:3306
+    volumes:
+      - pettycashdb:/var/lib/mysql
+      - ./database:/database
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+    mem_limit: 512m
+    mem_reservation: 128M
+    cpus: 0.5
+    networks:
+      pettycash:
+        ipv4_address: 10.15.0.99
+  nodejs:
+    image: node:16-alpine
+    container_name: pettycash-node
+    ports:
+      - 5173:5173
+    volumes:
+      - ./:/var/www
+    working_dir: /var/www
+    entrypoint: ["npm","run", "dev"]
+    mem_limit: 512m
+    mem_reservation: 128M
+    cpus: 0.5
+    networks:
+      pettycash:
+        ipv4_address: 10.15.0.100
+
+volumes:
+  pettycashdb: 
+    driver: local
+
+networks:
+  pettycash:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+          - subnet: 10.15.0.0/24
+            gateway: 10.15.0.1
