@@ -1,16 +1,15 @@
 # Yamato Cash Management - Laravel Inertijs
 
-Laravel Cash Management Example with Inertia V1.0.0  :tada:  with UI - Kit [daisyui](https://daisyui.com/)
+Laravel Cash Management Example with Inertia V1.0.0 :tada: with UI - Kit [daisyui](https://daisyui.com/)
 
 ## Support me
 
 <a href="https://trakteer.id/ajikamaludin" target="_blank"><img id="wse-buttons-preview" src="https://cdn.trakteer.id/images/embed/trbtn-blue-2.png" height="40" style="border:0px;height:40px;" alt="Trakteer Saya"></a>
 
-
 ## Requirements
 
-* PHP 8.0/8.1
-* Node 16
+-   PHP 8.3
+-   Node 20 or latest
 
 ## How to run
 
